@@ -50,3 +50,5 @@ buildNumber.properties
 
 ### Gradle ###
 build/
+
+test/
