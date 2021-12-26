@@ -38,7 +38,7 @@ public class GLRender implements GLRenderSystem{
         glMatrixMode(GL_MODELVIEW); //set the matrix to model view mode
 
         glPushMatrix(); // push the matrix
-        glRotatef((float) glfwGetTime() * 50.0f, 1.f, 1.f, 0.f); //apply transformation
+//        glRotatef((float) glfwGetTime() * 50.0f, 1.f, 1.f, 0.f); //apply transformation
 
         int id = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, id);
