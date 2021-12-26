@@ -12,6 +12,18 @@ public abstract class Camera {
 
     public abstract Vec3 getPos();
 
+    public Mat4 getModelProj() {
+        return modelProj;
+    }
+
+    public Vec3 getDirection() {
+        return direction;
+    }
+
+    public Mat4 getModelView() {
+        return modelView;
+    }
+
     Mat4 modelProj = new Mat4(0.0f);
     Vec3 pos = new Vec3(0.f);
     Vec3 direction = new Vec3(0.f);

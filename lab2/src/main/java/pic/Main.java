@@ -6,26 +6,25 @@ import pic.constant.Cube;
 import pic.graphcore.Camera;
 import pic.graphcore.GLCameraFree;
 import pic.graphcore.GLRenderSystem;
+import pic.graphcore.GLShader;
 import pic.graphcore.factory.GLRenderFactory;
 
+import static glm.Glm.linearRand;
 import static java.lang.Math.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.glUseProgram;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Main {
-    static void resize(long window, int width, int height) {
-        System.out.println("Width:" + width + "-Height:" + height);
+    private static Vec3 RGB = new Vec3();
 
-        float ratio = width / (float) height;
-        glViewport(0, 0, width, height);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
+    static void keyCallback(long window, int key, int scancode, int action, int mode) {
+        System.out.println("key:" + key + "-scancode:" + scancode + "-action:" + action + "-mode:" + mode);
+
+        if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+            System.out.println("SPACE");
+            RGB = new Vec3(linearRand(), linearRand(), linearRand());
+        }
     }
 
     public static void main(String[] args) {
@@ -46,17 +45,26 @@ public class Main {
         GL.createCapabilities();
 
         glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+        glfwSetKeyCallback(window, Main::keyCallback);
 
         Camera Cam = new GLCameraFree();
-        Cam.setPerspective((float) Math.toRadians(45.0), (float)width / height, 0.01f, 1000.0f);
+//        Cam.setPerspective((float) Math.toRadians(45.0), (float)width / height, 0.01f, 1000.0f);
+
+        GLShader shaderBrightDim = new GLShader("BrightAndDim_VertexShader.vs", "BrightAndDim_FragmentShader.fs", null);
 
         while (!glfwWindowShouldClose(window)) {
             glfwMakeContextCurrent(window);
             double angle = glfwGetTime() * 50.0f;
-            Cam.setPos(new Vec3(2 * cos(angle * PI / 180), 2, 2 * sin(angle * PI / 180)));
-//            Cam.start();
+//            Cam.setPos(new Vec3(2 * cos(angle * PI / 180), 2, 2 * sin(angle * PI / 180)));
+
+            shaderBrightDim.use();
+            shaderBrightDim.setVec3("rgb", RGB);
+            shaderBrightDim.setMat4("modelView", Cam.getModelView());
+            shaderBrightDim.setMat4("modelProj", Cam.getModelProj());
+            shaderBrightDim.setFloat("time", (float) glfwGetTime());
+
             renderer.render(window);
-            Cam.end();
+
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
