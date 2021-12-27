@@ -9,6 +9,8 @@ import pic.graphcore.GLRenderSystem;
 import pic.graphcore.GLShader;
 import pic.graphcore.factory.GLRenderFactory;
 
+import java.util.Random;
+
 import static glm.Glm.linearRand;
 import static java.lang.Math.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -16,14 +18,16 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Main {
-    private static Vec3 RGB = new Vec3();
+    private static Vec3 RGB = new Vec3(1, 0, 1);
 
-    static void keyCallback(long window, int key, int scancode, int action, int mode) {
+    private static void keyCallback(long window, int key, int scancode, int action, int mode) {
         System.out.println("key:" + key + "-scancode:" + scancode + "-action:" + action + "-mode:" + mode);
 
         if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
             System.out.println("SPACE");
-            RGB = new Vec3(linearRand(), linearRand(), linearRand());
+            Random rand = new Random();
+            RGB = new Vec3(rand.nextFloat(), rand.nextFloat(), rand.nextFloat());
+            System.out.println("RGB ==> " + RGB);
         }
     }
 
@@ -31,7 +35,7 @@ public class Main {
         int width = 640;
         int height = 480;
 
-        System.out.println("Task 3\n" +
+        System.out.println("Task 4\n" +
                 "Author: Ihor Prusan");
 
         GLRenderSystem renderer = GLRenderFactory.getGLRenderer();
@@ -48,17 +52,18 @@ public class Main {
         glfwSetKeyCallback(window, Main::keyCallback);
 
         Camera Cam = new GLCameraFree();
-//        Cam.setPerspective((float) Math.toRadians(45.0), (float)width / height, 0.01f, 1000.0f);
+        Cam.setPerspective((float) Math.toRadians(45.0), (float)width / height, 0.01f, 1000.0f);
 
         GLShader shaderBrightDim = new GLShader("BrightAndDim_VertexShader.vs", "BrightAndDim_FragmentShader.fs", null);
 
         while (!glfwWindowShouldClose(window)) {
             glfwMakeContextCurrent(window);
             double angle = glfwGetTime() * 50.0f;
-//            Cam.setPos(new Vec3(2 * cos(angle * PI / 180), 2, 2 * sin(angle * PI / 180)));
+            Cam.setPos(new Vec3(2 * cos(angle * PI / 180), 2, 2 * sin(angle * PI / 180)));
 
             shaderBrightDim.use();
             shaderBrightDim.setVec3("rgb", RGB);
+            System.out.println("set rgb ==> " + RGB);
             shaderBrightDim.setMat4("modelView", Cam.getModelView());
             shaderBrightDim.setMat4("modelProj", Cam.getModelProj());
             shaderBrightDim.setFloat("time", (float) glfwGetTime());

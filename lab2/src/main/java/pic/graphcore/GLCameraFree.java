@@ -15,8 +15,22 @@ public class GLCameraFree extends Camera {
 
     @Override
     public void setPos(Vec3 pos) {
-        Vec3 target = new Vec3(0.f);
-        Vec3 direction = pos.normalize(pos.sub(target));
+        Vec3 target = new Vec3(0.f, 0.f, 0.f);
+//        System.out.println("target ==> " + target);
+
+        Vec3 directionRaw = new Vec3(pos);
+//        System.out.println("directionRaw before sub ==> " + directionRaw);
+        directionRaw.x -= target.x;
+        directionRaw.y -= target.y;
+        directionRaw.z -= target.z;
+//        directionRaw = directionRaw.sub(target);
+//        System.out.println("directionRaw after sub ==> " + directionRaw);
+        Vec3 direction = directionRaw.normalize();
+//        System.out.println("direction ==> " + direction);
+//        System.out.println("directionRaw ==> " + directionRaw);
+//        System.out.println("pos ==> " + pos);
+//        direction = new Vec3(0, 2, 0);
+
         modelView = modelView.lookAt(pos, direction, new Vec3(0, 1, 0));
 
         glMatrixMode(GL_MODELVIEW);

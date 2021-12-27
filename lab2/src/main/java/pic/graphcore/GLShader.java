@@ -32,20 +32,22 @@ public class GLShader {
             // convert stream into string
             StringBuilder sb = new StringBuilder();
             while (vShaderFile.hasNextLine()) {
-                sb.append(vShaderFile.nextLine());
+                sb.append(vShaderFile.nextLine()).append("\n");
             }
             vertexCode = sb.toString();
+            System.out.println("VertexCode: " + vertexCode);
             sb = new StringBuilder();
             while (fShaderFile.hasNextLine()) {
-                sb.append(fShaderFile.nextLine());
+                sb.append(fShaderFile.nextLine()).append("\n");
             }
             fragmentCode = sb.toString();
+            System.out.println("FragmentCode: " + fragmentCode);
             // if geometry shader path is present, also load a geometry shader
             if (geometryPath != null) {
                 try (Scanner qShaderFile = new Scanner(new File(geometryPath))) {
                     sb = new StringBuilder();
                     while (qShaderFile.hasNextLine()) {
-                        sb.append(qShaderFile.nextLine());
+                        sb.append(qShaderFile.nextLine()).append("\n");
                     }
                     geometryCode = sb.toString();
                 }
@@ -116,9 +118,7 @@ public class GLShader {
     // ------------------------------------------------------------------------
 
     public void setVec2(String name, Vec2 value) {
-        float[] val = new float[1];
-        val[0] = value.x;
-        glUniform2fv(glGetUniformLocation(ID, name), val);
+        glUniform2fv(glGetUniformLocation(ID, name), value.toFA_());
     }
 
     public void setVec2(String name, float x, float y) {
@@ -127,9 +127,7 @@ public class GLShader {
     // ------------------------------------------------------------------------
 
     public void setVec3(String name, Vec3 value) {
-        float[] val = new float[1];
-        val[0] = value.x;
-        glUniform3fv(glGetUniformLocation(ID, name), val);
+        glUniform3fv(glGetUniformLocation(ID, name), value.toFa_());
     }
 
     public void setVec3(String name, float x, float y, float z) {
@@ -138,9 +136,8 @@ public class GLShader {
     // ------------------------------------------------------------------------
 
     public void setVec4(String name, Vec4 value) {
-        float[] val = new float[1];
-        val[0] = value.x;
-        glUniform4fv(glGetUniformLocation(ID, name), val);
+
+        glUniform4fv(glGetUniformLocation(ID, name), value.toFA_());
     }
 
     public void setVec4(String name, float x, float y, float z, float w) {
@@ -150,16 +147,13 @@ public class GLShader {
 
 
     public void setMat3(String name, Mat3 mat) {
-        float[] val = new float[1];
-        val[0] = mat.m00;
-        glUniformMatrix3fv(glGetUniformLocation(ID, name), false, val);
+        glUniformMatrix3fv(glGetUniformLocation(ID, name), false, mat.toFa_());
     }
     // ------------------------------------------------------------------------
 
     public void setMat4(String name, Mat4 mat) {
-        float[] val = new float[1];
-        val[0] = mat.m00;
-        glUniformMatrix4fv(glGetUniformLocation(ID, name), false, val);
+
+        glUniformMatrix4fv(glGetUniformLocation(ID, name), false, mat.toFa_());
     }
 
 
