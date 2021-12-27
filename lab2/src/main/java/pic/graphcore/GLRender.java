@@ -35,9 +35,9 @@ public class GLRender implements GLRenderSystem{
         } else {
             colorRGB = 0;
         }
-        glMatrixMode(GL_MODELVIEW); //set the matrix to model view mode
+//        glMatrixMode(GL_MODELVIEW); //set the matrix to model view mode
 
-        glPushMatrix(); // push the matrix
+//        glPushMatrix(); // push the matrix
 //        glRotatef((float) glfwGetTime() * 50.0f, 1.f, 1.f, 0.f); //apply transformation
 
         int id = glGenBuffers();
@@ -50,7 +50,7 @@ public class GLRender implements GLRenderSystem{
 
         glEnableClientState(GL_VERTEX_ARRAY);
         glDrawArrays(GL_TRIANGLES, 0, Cube.fVertices.length / 5);
-        glPopMatrix(); //pop the matrix
+//        glPopMatrix(); //pop the matrix
         glDisableClientState(GL_VERTEX_ARRAY);
     }
 

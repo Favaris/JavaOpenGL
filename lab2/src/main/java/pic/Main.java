@@ -54,7 +54,8 @@ public class Main {
             glfwMakeContextCurrent(window);
             double angle = glfwGetTime() * 50.0f;
             Cam.setPos(new Vec3(2 * cos(angle * PI / 180), 2, 2 * sin(angle * PI / 180)));
-//            Cam.start();
+//            Cam.setPos(new Vec3(0.f, 2.f, 0.f));
+            Cam.start();
             renderer.render(window);
             Cam.end();
             glfwSwapBuffers(window);
